@@ -71,7 +71,8 @@ namespace ix
         // See prctl and PR_SET_NAME property in
         // http://man7.org/linux/man-pages/man2/prctl.2.html
         //
-        pthread_setname_np(pthread_self(), name.substr(0, 15).c_str());
+        // pthread_setname_np(pthread_self(), name.substr(0, 15).c_str());
+        prctl(PR_SET_NAME, name.substr(0, 15).c_str(), 0, 0, 0);
 #elif defined(_WIN32)
         SetThreadName(-1, name.c_str());
 #elif defined(BSD)

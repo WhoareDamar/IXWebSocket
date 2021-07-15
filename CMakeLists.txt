@@ -147,12 +147,15 @@ if (USE_TLS)
         message(FATAL_ERROR "TLS Configuration error: unknown backend")
     endif()
 endif()
+list(APPEND COMPILE_DEFS "-D_GLIBCXX_USE_C99")
 
 add_library( ixwebsocket
     ${IXWEBSOCKET_SOURCES}
     ${IXWEBSOCKET_HEADERS}
 )
 
+target_compile_definitions(ixwebsocket PUBLIC ${COMPILE_DEFS})
+target_link_libraries(ixwebsocket PUBLIC pthread)
 if (USE_TLS)
     target_compile_definitions(ixwebsocket PUBLIC IXWEBSOCKET_USE_TLS)
     if (USE_MBED_TLS)
@@ -199,7 +202,7 @@ if (USE_TLS)
   endif()
 endif()
 
-option(USE_ZLIB "Enable zlib support" TRUE)
+option(USE_ZLIB "Enable zlib support" FALSE)
 
 if (USE_ZLIB)
   # Use ZLIB_ROOT CMake variable if you need to use your own zlib
@@ -227,10 +230,10 @@ if (WIN32)
   endif()
 endif()
 
-if (UNIX)
-  find_package(Threads)
-  target_link_libraries(ixwebsocket ${CMAKE_THREAD_LIBS_INIT})
-endif()
+# if (UNIX)
+#   find_package(Threads)
+#   target_link_libraries(ixwebsocket ${CMAKE_THREAD_LIBS_INIT})
+# endif()
 
 
 set( IXWEBSOCKET_INCLUDE_DIRS
